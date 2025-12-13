@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* European Health Theme */
+  --background: #F7F9F9;
+  /* Cream/Off-white */
+  --foreground: #1A3C34;
+  /* Deep Green-Black text */
+
+  --primary: #0F4C5C;
+  /* Deep Teal */
+  --primary-foreground: #FFFFFF;
+
+  --secondary: #98C1D9;
+  /* Soft Sage/Blue */
+  --secondary-foreground: #0F4C5C;
+
+  --accent: #E07A5F;
+  /* Terra Cotta */
+  --accent-foreground: #FFFFFF;
+
+  --surface: #FFFFFF;
+  --surface-foreground: #1A3C34;
+
+  --border: #DAE3E3;
+  --input: #DAE3E3;
+  --ring: #0F4C5C;
+
+  --radius: 0.5rem;
+
+  --foreground-rgb: 26, 60, 52;
+  /* Compatible fallback */
+  --background-start-rgb: 247, 249, 249;
+  --background-end-rgb: 247, 249, 249;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}

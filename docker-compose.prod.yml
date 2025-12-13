@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # Database Service (PostgreSQL)
+  # ==========================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: mediconnect_db_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-securepassword}
+      POSTGRES_DB: ${POSTGRES_DB:-mediconnect}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    networks:
+      - mediconnect_net
+    ports:
+      - "5432:5432"
+
+  # ==========================================
+  # Backend API Service
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mediconnect_backend_prod
+    restart: always
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-securepassword}@postgres:5432/${POSTGRES_DB:-mediconnect}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-production_secret_key_change_me}
+      # Initializing standard monitoring vars
+      NODE_ENV: production
+      CORS_ORIGIN: http://localhost:3001
+    depends_on:
+      - postgres
+    networks:
+      - mediconnect_net
+    # Expose internally, or externally if needed directly
+    ports:
+      - "3000:3000"
+
+  # ==========================================
+  # Frontend Service (Next.js)
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    container_name: mediconnect_frontend_prod
+    restart: always
+    ports:
+      - "3001:3000" # Map host port 3001 to container 3000
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - backend
+    networks:
+      - mediconnect_net
+
+  # ==========================================
+  # Monitoring Service (Prometheus)
+  # ==========================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mediconnect_prometheus_prod
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - mediconnect_net
+
+networks:
+  mediconnect_net:
+    driver: bridge
+
+volumes:
+  postgres_prod_data:

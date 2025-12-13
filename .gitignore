@@ -32,3 +32,7 @@ docker-compose.override.yml
 *.swp
 *.swo
 .DS_Store
+
+# Internal Documentation (Ignored as per request)
+**/UNDERSTAND.md
+DEPLOY_FREE.md

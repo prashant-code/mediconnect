@@ -36,3 +36,5 @@ docker-compose.override.yml
 # Internal Documentation (Ignored as per request)
 **/UNDERSTAND.md
 DEPLOY_FREE.md
+LEARNING_HUB.md
+INTERVIEW_SCRIPT.md

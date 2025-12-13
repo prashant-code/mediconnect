@@ -1,4 +1,4 @@
-# 🏗️ MediConnect Enterprise Architecture
+# MediConnect Health Care Architecture
 
 > **High-Level System Design & Engineering Standards**
 

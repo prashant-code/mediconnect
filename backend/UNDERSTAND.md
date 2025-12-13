@@ -182,4 +182,45 @@ graph LR
 
 ---
 
+## 7. 🧪 Testing Strategy
+
+**Fundamental Question**: *How do I know my changes didn't break existing features?*
+
+**Answer**: Automated Testing with **Jest**.
+
+### Unit vs Integration
+-   **Unit Tests**: Test *one function* in isolation.
+    *   *Tools*: `jest`.
+    *   *Mocking*: We "fake" the database calls (`prisma.mock`).
+-   **Integration Tests**: Test the *API Endpoint*.
+    *   *Tools*: `supertest`.
+    *   *Real World*: Spins up a test server and makes actual HTTP requests.
+
+### How to Run Tests
+```bash
+# Run all tests
+npm test
+
+# Run and watch for changes (Dev Mode)
+npm run test:watch
+
+# Check how much code is covered
+npm test -- --coverage
+```
+
+### Mocking Logic (Under the Hood)
+When testing `AuthService`, we don't want to actually create users in the DB.
+We use **Dependency Injection / Mocking**:
+```typescript
+jest.mock('../utils/db'); // Tell Jest to swap Real DB with Fake DB
+
+test('should return token on login', async () => {
+  prisma.user.findUnique.mockResolvedValue(mockUser); // Fake the DB response
+  const result = await authService.login(...);
+  expect(result).toHaveProperty('token');
+});
+```
+
+---
+
 **Author**: Prashant Chaubey (<prashanttchaubey@gmail.com>)

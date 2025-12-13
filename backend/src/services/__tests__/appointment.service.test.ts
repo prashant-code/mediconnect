@@ -6,7 +6,7 @@ jest.mock('@prisma/client', () => {
   const mPrisma = {
     patient: { findUnique: jest.fn() },
     doctor: { findUnique: jest.fn() },
-    appointment: { create: jest.fn(), findMany: jest.fn(), findUnique: jest.fn() },
+    appointment: { create: jest.fn(), findMany: jest.fn(), findUnique: jest.fn(), findFirst: jest.fn() },
     note: { create: jest.fn() }
   };
   return {
@@ -46,6 +46,8 @@ describe('AppointmentService', () => {
   describe('createAppointment', () => {
     it('should create appointment if patient exists', async () => {
       (prisma.patient.findUnique as jest.Mock).mockResolvedValue({ id: 'p1' });
+      (prisma.doctor.findUnique as jest.Mock).mockResolvedValue({ id: 'd1' });
+      (prisma.appointment.findFirst as jest.Mock).mockResolvedValue(null);
       (prisma.appointment.create as jest.Mock).mockResolvedValue({ id: 'a1' });
 
       const result = await appointmentService.createAppointment('u1', { doctorId: 'd1', dateTime: '2023-01-01', reason: 'Sick' });

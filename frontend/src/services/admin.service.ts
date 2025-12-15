@@ -15,16 +15,16 @@ export interface AuditLog {
 }
 
 export interface SystemStats {
-    totalPatients: number;
-    totalDoctors: number;
-    totalAppointments: number;
-    activeUsers: number;
+    patients: number;
+    doctors: number;
+    appointments: number;
+    auditLogs: number;
 }
 
 export const adminService = {
     getStats: async () => {
         const response = await api.get('/admin/stats');
-        return response.data;
+        return response.data.data;
     },
 
     getAuditLogs: async (limit: number = 50, offset: number = 0) => {
@@ -34,11 +34,11 @@ export const adminService = {
     
     getDoctors: async () => {
         const response = await api.get('/admin/doctors');
-        return response.data;
+        return response.data.data;
     },
 
     getPatients: async () => {
         const response = await api.get('/admin/patients');
-        return response.data;
+        return response.data.data;
     }
 };

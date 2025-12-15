@@ -60,10 +60,10 @@ export default function AdminDashboardClient() {
             <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
                 {/* Stats Overview */}
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-                    <StatCard title="Total Appointments" value={stats?.totalAppointments || 0} icon={FileText} />
-                    <StatCard title="Active Patients" value={stats?.totalPatients || 0} icon={Users} />
-                    <StatCard title="Active Doctors" value={stats?.totalDoctors || 0} icon={Activity} />
-                    <StatCard title="System Events" value={auditData?.total || 0} icon={ShieldAlert} />
+                    <StatCard title="Total Appointments" value={stats?.appointments || 0} icon={FileText} />
+                    <StatCard title="Active Patients" value={stats?.patients || 0} icon={Users} />
+                    <StatCard title="Active Doctors" value={stats?.doctors || 0} icon={Activity} />
+                    <StatCard title="System Events" value={stats?.auditLogs || 0} icon={ShieldAlert} />
                 </div>
 
                 {/* Audit Logs Section */}
@@ -87,15 +87,15 @@ export default function AdminDashboardClient() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {auditData?.logs?.map((log: AuditLog) => (
+                                {auditData?.data?.map((log: AuditLog) => (
                                     <tr key={log.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {format(new Date(log.createdAt), 'MMM d, yyyy HH:mm:ss')}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${log.action.includes('LOGIN') ? 'bg-green-100 text-green-800' :
-                                                    log.action.includes('ERROR') ? 'bg-red-100 text-red-800' :
-                                                        'bg-blue-100 text-blue-800'
+                                                log.action.includes('ERROR') ? 'bg-red-100 text-red-800' :
+                                                    'bg-blue-100 text-blue-800'
                                                 }`}>
                                                 {log.action}
                                             </span>
@@ -112,7 +112,7 @@ export default function AdminDashboardClient() {
                                         </td>
                                     </tr>
                                 ))}
-                                {(!auditData?.logs || auditData.logs.length === 0) && (
+                                {(!auditData?.data || auditData.data.length === 0) && (
                                     <tr>
                                         <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
                                             No audit logs found.

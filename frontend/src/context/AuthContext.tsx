@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
 interface User {
     id: string;
     email: string;
-    role: 'PATIENT' | 'DOCTOR';
+    role: 'PATIENT' | 'DOCTOR' | 'ADMIN';
 }
 
 interface AuthContextType {
@@ -50,6 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(userData);
         if (userData.role === 'PATIENT') {
             router.push('/dashboard/patient');
+        } else if (userData.role === 'ADMIN') {
+            router.push('/dashboard/admin');
         } else {
             router.push('/dashboard/doctor');
         }

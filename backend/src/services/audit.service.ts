@@ -2,6 +2,12 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class AuditService {
+  async log(data: { userId?: string, action: string, resource: string, details?: string, ipAddress?: string }) {
+    return prisma.auditLog.create({
+      data
+    });
+  }
+
   async getLogs(limit: number = 50, offset: number = 0) {
     const logs = await prisma.auditLog.findMany({
       take: limit,
